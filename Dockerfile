@@ -5,12 +5,15 @@ FROM golang:1.22-alpine AS build
 WORKDIR /src
 
 # Download dependencies
-COPY go.mod go.sum .
-RUN go mod download
+RUN --mount=type=bind,src=go.mod,target=go.mod \
+    --mount=type=bind,src=go.sum,target=go.sum \
+    --mount=type=cache,target=/go/pkg/mod \
+    go mod download
 
 # Compile the program
-COPY . .
-RUN go build -o /buildme .
+RUN --mount=type=bind,target=. \
+    --mount=type=cache,target=/go/pkg/mod \
+    go build -o /buildme .
 
 # final runtime stage
 FROM alpine AS final
