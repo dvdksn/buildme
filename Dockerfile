@@ -20,3 +20,7 @@ COPY --from=build /buildme /
 
 # Start the program
 ENTRYPOINT ["/buildme"]
+
+# binaries stage for exporting compiled binaries
+FROM scratch AS binaries
+COPY --from=build /buildme /
