@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 
 # build stage for building the program
-FROM golang:1.22-alpine AS build
+FROM --platform=$BUILDPLATFORM golang:1.22-alpine AS build
+ARG TARGETOS
+ARG TARGETARCH
 WORKDIR /src
 
 # Download dependencies
@@ -10,7 +12,7 @@ RUN go mod download
 
 # Compile the program
 COPY . .
-RUN go build -o /buildme .
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /buildme .
 
 # final runtime stage
 FROM alpine AS final
