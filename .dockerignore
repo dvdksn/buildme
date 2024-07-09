@@ -1,0 +1,9 @@
+# Compiled binary
+buildme
+
+# Test binary, built with `go test -c`
+*.test
+
+# Go workspace files
+go.work
+go.work.sum
